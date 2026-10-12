@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sentinel-2 Bare Soil Index analysis for Coimbatore, January–March, 2018–2025.">
+  <title>Coimbatore Surface Change Explorer</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<header>
+  <nav>
+    <b>COIMBATORE · GEO EXPLORER</b>
+    <div><a href="#results">Results</a><a href="#method">Method</a><a href="#limits">Limitations</a></div>
+  </nav>
+  <p class="eyebrow">URBAN INFORMATICS · SPATIAL ANALYTICS</p>
+  <h1>Reading surface change<br><em>in Coimbatore</em></h1>
+  <p class="lede">A seasonal comparison of the Bare Soil Index (BSI) using Sentinel-2 surface reflectance, January–March, 2018–2025.</p>
+  <div class="pills"><span>8 annual composites</span><span>Sentinel-2 SR Harmonized</span><span>Google Earth Engine</span></div>
+</header>
+
+<main>
+  <section class="intro">
+    <div>
+      <p class="eyebrow">THE RESEARCH QUESTION</p>
+      <h2>How did the bare and exposed-surface signal change?</h2>
+      <p>This project compares BSI composites for the same January–March period in each year from 2018 through 2025. BSI is a spectral indicator, not a direct measurement of bare-soil area.</p>
+    </div>
+    <aside>
+      <p class="eyebrow">KEY RESULT · 2025 − 2018</p>
+      <strong class="big">−0.0356</strong>
+      <p>Mean BSI difference</p>
+      <hr>
+      <small>The index signal shifted downward on average. This is not a direct estimate of bare-soil area lost.</small>
+    </aside>
+  </section>
+
+  <section id="results">
+    <p class="eyebrow">01 / TEMPORAL PATTERN</p>
+    <h2>Annual mean BSI</h2>
+    <p class="sub">Select a point to inspect a year. Values are unitless.</p>
+    <div class="panel">
+      <div class="chart"><canvas id="chart"></canvas></div>
+      <p id="readout">Select a year on the chart to inspect its mean BSI.</p>
+      <div class="chart-actions">
+        <a href="assets/coimbatore-annual-mean-bsi.csv" download>Download annual results (CSV) ↗</a>
+        <button id="reset" type="button">Reset selection</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">02 / SPATIAL PATTERN</p>
+    <h2>Where did BSI change?</h2>
+    <p class="sub">ΔBSI = BSI₂₀₂₅ − BSI₂₀₁₈</p>
+    <div class="map"><img src="assets/coimbatore-bsi-difference.png" alt="Coimbatore BSI difference map. Blue indicates negative change and red indicates positive change." onerror="this.alt='Map image not available';this.style.display='none'"></div>
+    <div class="legend"><span>🔵 BSI decreased</span><span>⚪ Near zero</span><span>🔴 BSI increased</span><span>Scale: −0.2 to +0.2</span></div>
+    <div class="stats">
+      <article><small>Mean difference</small><b>−0.0356</b></article>
+      <article><small>Median difference</small><b>−0.0274</b></article>
+      <article><small>Standard deviation</small><b>0.0704</b></article>
+    </div>
+    <p class="caption">Blue indicates lower BSI in 2025; red indicates higher BSI. The comparison uses pixels with at least one valid observation in both endpoint years.</p>
+  </section>
+
+  <section id="animation">
+    <p class="eyebrow">03 / ANNUAL VISUALIZATION</p>
+    <h2>BSI signal through time</h2>
+    <p class="sub">Animated January–March BSI composites, 2018–2025.</p>
+    <div class="map"><img src="assets/coimbatore-bsi-annual-animation.gif" alt="Animated Coimbatore BSI maps for 2018 through 2025"></div>
+    <p class="caption">The animation uses a consistent display range across years.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">04 / INTERPRETATION</p>
+    <h2>Overall decline, with annual fluctuations</h2>
+    <div class="insights">
+      <article><h3>Lower endpoint mean</h3><p>Mean BSI decreased from <b>0.1013</b> in 2018 to <b>0.0657</b> in 2025.</p></article>
+      <article><h3>Year-to-year variation</h3><p>The lowest annual mean was <b>0.0553 in 2021</b>. The index rose in 2022–2023 and declined again in 2024.</p></article>
+      <article><h3>Spatially mixed change</h3><p>The negative mean and median indicate an overall downward shift, while the standard deviation shows local variation.</p></article>
+    </div>
+    <div class="callout"><b>Interpretation caution</b><p>A decline in BSI is a spectral change, not a land-area percentage. Changes may reflect exposed soil, vegetation, moisture, built surfaces or observation conditions. BSI alone cannot identify the cause.</p></div>
+  </section>
+
+  <section id="method">
+    <p class="eyebrow">05 / WORKFLOW</p>
+    <h2>From satellite imagery to BSI change</h2>
+    <div class="steps">
+      <article><b>01 · Collect imagery</b><p>Sentinel-2 Surface Reflectance Harmonized, filtered to Coimbatore and January 1–April 1 for each year.</p></article>
+      <article><b>02 · Mask poor-quality pixels</b><p>SCL classes for no-data, defective pixels, cloud shadow, clouds, cirrus and snow were excluded.</p></article>
+      <article><b>03 · Build composites</b><p>A median composite was generated for each year, then BSI was calculated from SWIR1, red, NIR and blue bands.</p></article>
+      <article><b>04 · Compare endpoints</b><p>BSI(2025) minus BSI(2018), using pixels with observations in both endpoint years.</p></article>
+    </div>
+    <div class="formula"><b>BARE SOIL INDEX</b><code>BSI = ((B11 + B4) − (B8 + B2)) / ((B11 + B4) + (B8 + B2))</code><p>B2 = blue · B4 = red · B8 = near-infrared · B11 = short-wave infrared 1</p></div>
+  </section>
+
+  <section id="limits">
+    <p class="eyebrow">06 / TRANSPARENCY</p>
+    <h2>Limitations and sources</h2>
+    <ul>
+      <li>2018 had fewer scenes in the January–March window than later years.</li>
+      <li>The common mask requires at least one valid observation in each endpoint year; it does not equalize observation counts or acquisition dates.</li>
+      <li>BSI is influenced by moisture, vegetation, soil type, built materials and observation conditions; it is not a direct land-cover map.</li>
+      <li>Verify the ward-boundary source and vintage before describing it as an authoritative current boundary.</li>
+    </ul>
+    <p><b>Satellite data:</b> <a href="https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED" target="_blank" rel="noopener">Sentinel-2 SR Harmonized ↗</a></p>
+    <p><b>Processing:</b> <a href="https://earthengine.google.com/" target="_blank" rel="noopener">Google Earth Engine ↗</a> · <b>Hosting:</b> <a href="https://docs.github.com/en/pages" target="_blank" rel="noopener">GitHub Pages ↗</a></p>
+  </section>
+</main>
+
+<footer><b>COIMBATORE SURFACE CHANGE EXPLORER</b><span>Urban Informatics · January–March · 2018–2025</span></footer>
+<script src="script.js"></script>
+</body>
+</html>
