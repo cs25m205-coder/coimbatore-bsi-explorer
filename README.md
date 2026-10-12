@@ -22,3 +22,6 @@ The chart loads Chart.js from jsDelivr, so it needs an internet connection. The 
 Dataset: `COPERNICUS/S2_SR_HARMONIZED` in Google Earth Engine. Seasonal window: January 1 to April 1 each year. BSI = ((B11 + B4) − (B8 + B2)) / ((B11 + B4) + (B8 + B2)). Difference = BSI(2025) − BSI(2018), using pixels with at least one valid observation in both endpoint years.
 
 Interpretation caution: BSI is a spectral index, not a direct measurement of bare-soil area. The common mask does not equalize observation counts or acquisition dates. Verify and cite the boundary source/vintage in the submitted report.
+
+
+Included visual outputs: `assets/coimbatore-annual-mean-bsi.png` (annual trend plot) and `assets/coimbatore-bsi-annual-animation.gif` (annotated annual BSI animation).
